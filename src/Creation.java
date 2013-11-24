@@ -38,7 +38,7 @@ public class Creation extends JFrame implements MouseListener{
 		this.ReadFile("laby.txt");
 		System.out.println(x+"/"+y);
 		this.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE) ;
-		this.setPreferredSize(new Dimension (600,300));
+		this.setPreferredSize(new Dimension (600,600));
 		
 		
 		// ****** Initialisation
