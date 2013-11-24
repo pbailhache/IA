@@ -1,9 +1,8 @@
 import java.util.Collections;
 import java.util.LinkedList;
-import java.math.*;
 
 
-public class MeilleurDAbord {
+public class AStar {
 
 	private int[][] laby ;
 	private int[][] pos_visiter ;
@@ -12,14 +11,14 @@ public class MeilleurDAbord {
 	LinkedList<Noeud> maListe = new LinkedList() ;
 
 	
-	public MeilleurDAbord ( int[][] tab,int x, int y, int pos_x, int pos_y, int end_x, int end_y ){
+	public AStar ( int[][] tab,int x, int y, int pos_x, int pos_y, int end_x, int end_y){
 		this.laby = tab ;
 		this.x=x;
 		this.y=y;
-		this.end_x = end_x ;
-		this.end_y = end_y ;
 		this.pos_x = pos_x ;
 		this.pos_y = pos_y ;
+		this.end_x = end_x ;
+		this.end_y = end_y ;
 		this.pos_visiter = new int[y][x];
 		this.tableau_valeur = new float[y][x];
 		this.initTabValeur();
@@ -35,8 +34,7 @@ public class MeilleurDAbord {
 			if ( this.tableau_valeur[y-1][x] == -1){
 				donneValeur(x,y-1);
 			}
-		}
-		
+		}		
 		if ( x>0){
 			if (this.tableau_valeur[y][x-1] == -1){
 				donneValeur(x-1,y);
@@ -80,7 +78,6 @@ public class MeilleurDAbord {
 		}	
 	}
 	
-	
 	public void afficheValeurPos(){
 		for ( int j = 0 ; j<this.y;j++){
 			for ( int i = 0 ; i<this.x;i++){
@@ -115,7 +112,7 @@ public class MeilleurDAbord {
 		return l ;
 	}
 	
-	public Noeud meilleurDAb(){
+	public Noeud aStar(){
 		Noeud noeudCourant ; 		
 		if (!maListe.isEmpty()){			
 			noeudCourant = maListe.getFirst();
@@ -127,23 +124,25 @@ public class MeilleurDAbord {
 			maListe.removeFirst();
 			
 			if (testBut(noeudCourant)){
-				System.out.println("FINI !!!!!!!!!!");
 				maListe.clear();
 				return noeudCourant ;
 			}
 			else {		
 					
 					if (isValide(noeudCourant.x,noeudCourant.y-1)){
-						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,tableau_valeur[noeudCourant.y-1][noeudCourant.x]));
+						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,tableau_valeur[noeudCourant.y-1][noeudCourant.x]+1+(noeudCourant.h-tableau_valeur[noeudCourant.y][noeudCourant.x])));
 					}
 					if (isValide(noeudCourant.x-1,noeudCourant.y)){
-						maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x-1]));
+						maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x-1]+1+(noeudCourant.h-tableau_valeur[noeudCourant.y][noeudCourant.x])));
+
 					}
 					if (isValide(noeudCourant.x+1,noeudCourant.y)){
-						maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x+1]));
+						maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x+1]+1+(noeudCourant.h-tableau_valeur[noeudCourant.y][noeudCourant.x])));
+
 					}
 					if (isValide(noeudCourant.x,noeudCourant.y+1)){
-						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,tableau_valeur[noeudCourant.y+1][noeudCourant.x]));
+						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,tableau_valeur[noeudCourant.y+1][noeudCourant.x]+1+(noeudCourant.h-tableau_valeur[noeudCourant.y][noeudCourant.x])));
+
 					}
 			}
 
@@ -154,11 +153,10 @@ public class MeilleurDAbord {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.afficheValeurPos(); 
+			//this.afficheValeurPos(); 
 			return maListe.getFirst();
 		}
 		return new Noeud(0,0,0);
 	}
-	
 	
 }
