@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 import javax.swing.border.LineBorder;
 
 
@@ -24,6 +25,7 @@ public class Creation extends JFrame implements MouseListener{
 	// Variable algo
 	private CoutUniforme coutUni = null ;
 	private MeilleurDAbord meilleur = null ;
+	private AStar astar = null ;
 	// Variable
 	private JPanel my_panel ;
 	private JButton button_next, button_fin ;
@@ -35,7 +37,8 @@ public class Creation extends JFrame implements MouseListener{
 	
 	public Creation (){
 		super("Porjet Labyrinthe");
-		this.ReadFile("laby.txt");
+		ToolTipManager.sharedInstance().setInitialDelay(0);
+		this.ReadFile("laby2.txt");
 		System.out.println(x+"/"+y);
 		this.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE) ;
 		this.setPreferredSize(new Dimension (600,300));
@@ -86,6 +89,12 @@ public class Creation extends JFrame implements MouseListener{
 					panel = new JPanel();
 					panel.setBorder(new LineBorder(Color.WHITE, 1));
 					panel.setBackground(Color.RED);
+					my_panel.add(panel);
+				}
+				else if ( this.my_laby[j][i]==4){
+					panel = new JPanel();
+					panel.setBorder(new LineBorder(Color.WHITE, 1));
+					panel.setBackground(Color.GREEN);
 					my_panel.add(panel);
 				}
 				else if ( this.my_laby[j][i]==2){
@@ -190,48 +199,77 @@ public class Creation extends JFrame implements MouseListener{
 			Noeud noeud ;
 			if( this.menu_algo.getSelectedItem()=="Option 1"){
 				if ( this.coutUni==null){
-					System.out.println("Option 1 NEXT");
 					coutUni = new CoutUniforme(this.my_laby,this.x,this.y, this.pos_x, this.pos_y);
 					noeud = coutUni.CoutUni();
-					my_laby[pos_y][pos_x]=0;
+					my_laby[pos_y][pos_x]=4;
 					my_laby[noeud.y][noeud.x]=3;
 					// Reactualisation de l'affichage
 					this.creationJPanel();
 				}
 				else {
 					noeud = coutUni.CoutUni();
-					my_laby[pos_y][pos_x]=0;
-					my_laby[noeud.y][noeud.x]=3;
-					// Reactualisation de l'affichage
-					this.my_panel.revalidate();
+					if (noeud.x == this.end_x && noeud.y ==end_y){
+						System.out.println("ARRIVE");
+					}
+					else {
+						my_laby[pos_y][pos_x]=4;
+						my_laby[noeud.y][noeud.x]=3;
+						// Reactualisation de l'affichage
+						
+						this.my_panel.revalidate();					}
 					
 				}
 			}
 			else if( this.menu_algo.getSelectedItem()=="Option 2"){
 				if ( this.meilleur==null){
-					System.out.println("Option 2 NEXT");
 					meilleur = new MeilleurDAbord(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, this.end_x, this.end_y);
 					meilleur.afficheValeur();
-					noeud = meilleur.CoutUni();
-					my_laby[pos_y][pos_x]=0;
+					noeud = meilleur.meilleurDAb();
+					my_laby[pos_y][pos_x]=4;
 					my_laby[noeud.y][noeud.x]=3;
 					System.out.println("Position : " + noeud.x +"/"+ noeud.y+ "  Valeur : " + noeud.h );
 					// Reactualisation de l'affichage
 					this.creationJPanel();
 				}
 				else {
-					noeud = meilleur.CoutUni();
-					my_laby[pos_y][pos_x]=0;
-					my_laby[noeud.y][noeud.x]=3;
-					System.out.println("Position : " + noeud.x +"/"+ noeud.y + "  Valeur : " + noeud.h);
-
-					// Reactualisation de l'affichage
-					this.my_panel.revalidate();
-					
+					noeud = meilleur.meilleurDAb();
+					if (noeud.x == this.end_x && noeud.y ==end_y){
+						System.out.println("ARRIVE");
+					}
+					else {
+						my_laby[pos_y][pos_x]=4;
+						my_laby[noeud.y][noeud.x]=3;
+						System.out.println("Position : " + noeud.x +"/"+ noeud.y + "  Valeur : " + noeud.h);
+	
+						// Reactualisation de l'affichage
+						this.my_panel.revalidate();
+					}
 				}
 			}
 			else if( this.menu_algo.getSelectedItem()=="Option 3"){
-		
+				if ( this.astar==null){
+					astar = new AStar(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, this.end_x, this.end_y);
+					astar.afficheValeur();
+					noeud = astar.aStar();
+					my_laby[pos_y][pos_x]=4;
+					my_laby[noeud.y][noeud.x]=3;
+					System.out.println("Position : " + noeud.x +"/"+ noeud.y+ "  Valeur : " + noeud.h );
+					// Reactualisation de l'affichage
+					this.creationJPanel();
+				}
+				else  {
+					noeud = astar.aStar();
+					if (noeud.x == this.end_x && noeud.y ==end_y){
+						System.out.println("ARRIVE");
+					}
+					else {
+						my_laby[pos_y][pos_x]=4;
+						my_laby[noeud.y][noeud.x]=3;
+						System.out.println("Position : " + noeud.x +"/"+ noeud.y + "  Valeur : " + noeud.h);
+	
+						// Reactualisation de l'affichage
+						this.my_panel.revalidate();					}
+				}
 			}
 		}
 
