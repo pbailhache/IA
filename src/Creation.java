@@ -27,7 +27,7 @@ public class Creation extends JFrame implements MouseListener{
 	private MeilleurDAbord meilleur = null ;
 	private AStar astar = null ;
 	// Variable
-	private JPanel my_panel ;
+	private Laby my_panel ;
 	private JButton button_next, button_fin ;
 	private JComboBox menu_algo ;
 	private Box box_bas, box_haut ;
@@ -38,10 +38,10 @@ public class Creation extends JFrame implements MouseListener{
 	public Creation (){
 		super("Porjet Labyrinthe");
 		ToolTipManager.sharedInstance().setInitialDelay(0);
-		this.ReadFile("laby2.txt");
+		this.ReadFile("laby.txt");
 		System.out.println(x+"/"+y);
 		this.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE) ;
-		this.setPreferredSize(new Dimension (600,600));
+		this.setPreferredSize(new Dimension (600,300));
 		
 		
 		// ****** Initialisation
@@ -71,7 +71,7 @@ public class Creation extends JFrame implements MouseListener{
 		box_haut.add(Box.createHorizontalGlue());
 		
 		//creationJPanel();
-		creationJPanel();
+		my_panel = new Laby(x,y,pos_x,pos_y,end_x,end_y,my_laby,this);
 		// ******** Ajout dans la frame
 		this.add(box_haut,BorderLayout.NORTH);
 		this.add(box_bas,BorderLayout.SOUTH);
@@ -79,7 +79,7 @@ public class Creation extends JFrame implements MouseListener{
 	}
 	
 	// ************************* Creation des JPanel *******************
-	public void creationJPanel (){
+	/*public void creationJPanel (){
 		my_panel = new JPanel();
 		my_panel.setLayout(new GridLayout(this.y+1,this.x+1));
 		JPanel panel ;
@@ -118,7 +118,7 @@ public class Creation extends JFrame implements MouseListener{
 			}
 		}
 	}
-	
+	*/
 	
 	// ************************* ReadFile *******************************
 	
@@ -203,21 +203,26 @@ public class Creation extends JFrame implements MouseListener{
 					noeud = coutUni.CoutUni();
 					my_laby[pos_y][pos_x]=4;
 					my_laby[noeud.y][noeud.x]=3;
+					this.pos_x = noeud.x ;
+					this.pos_y = noeud.y ;
 					// Reactualisation de l'affichage
-					this.creationJPanel();
+					this.my_panel.affichage(my_laby);
 				}
 				else {
 					noeud = coutUni.CoutUni();
 					if (noeud.x == this.end_x && noeud.y ==end_y){
+						this.pos_x = this.end_x ;
+						this.pos_y = this.end_y ;
 						System.out.println("ARRIVE");
 					}
 					else {
 						my_laby[pos_y][pos_x]=4;
 						my_laby[noeud.y][noeud.x]=3;
-						// Reactualisation de l'affichage
-						
-						this.my_panel.revalidate();					}
-					
+						this.pos_x = noeud.x ;
+						this.pos_y = noeud.y ;
+						// Reactualisation de l'affichage				
+						this.my_panel.affichage(my_laby);
+					}
 				}
 			}
 			else if( this.menu_algo.getSelectedItem()=="Option 2"){
@@ -229,7 +234,7 @@ public class Creation extends JFrame implements MouseListener{
 					my_laby[noeud.y][noeud.x]=3;
 					System.out.println("Position : " + noeud.x +"/"+ noeud.y+ "  Valeur : " + noeud.h );
 					// Reactualisation de l'affichage
-					this.creationJPanel();
+					//this.creationJPanel();
 				}
 				else {
 					noeud = meilleur.meilleurDAb();
@@ -255,7 +260,7 @@ public class Creation extends JFrame implements MouseListener{
 					my_laby[noeud.y][noeud.x]=3;
 					System.out.println("Position : " + noeud.x +"/"+ noeud.y+ "  Valeur : " + noeud.h );
 					// Reactualisation de l'affichage
-					this.creationJPanel();
+					//this.creationJPanel();
 				}
 				else  {
 					noeud = astar.aStar();
@@ -307,6 +312,8 @@ public class Creation extends JFrame implements MouseListener{
 			my_lab.setVisible (true);
 		
 		}
+		
+		
 	
 	
 }
