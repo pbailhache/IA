@@ -126,7 +126,7 @@ public class CoutUniforme {
 	}
 	
 	public boolean isValideVision(int x, int y){
-		if ( (laby[y][x]!=1)){
+		if ( (y > 0 && x > 0 && y < this.y && x < this.x && laby[y][x]!=1 )){
 				return true ;
 			}
 			else {

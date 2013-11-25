@@ -3,9 +3,9 @@ import sys,os,random
 #UTILISATION
 #
 # python ./labyGen 
-# Créé un fichier lab*I* 
+# Cree un fichier lab*I* 
 #
-# VOus pouvez modifier l'algo de génération de labyrinthe à vos risques et périls.
+# Vous pouvez modifier l'algo de generation de labyrinthe a vos risques et perils.
 #
 #UTILISATION
 
