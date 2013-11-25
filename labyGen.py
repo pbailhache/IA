@@ -1,6 +1,16 @@
 import sys,os,random
 
+#UTILISATION
+#
+# python ./labyGen 
+# Créé un fichier lab*I* 
+#
+# VOus pouvez modifier l'algo de génération de labyrinthe à vos risques et périls.
+#
+#UTILISATION
+
 #ICI ON REDEFINI LES VARIABLES DU LABYRINTHE (POSSIBLE DE LES CHANGER A LA MAIN DANS LE FICHIER POUR FAIRE D'AUTRE TESTS)
+
 xPlayer = 1
 yPlayer = 1
 xExit = 9
