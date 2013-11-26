@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -69,7 +70,7 @@ public class Laby extends JPanel{
 		}
 		this.my_frame.pack();
 	}
-
+	
 	
 	
 }

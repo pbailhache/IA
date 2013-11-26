@@ -6,11 +6,13 @@ import java.util.Comparator;
 public class Noeud { 
 	public int x, y, x_end, y_end;
 	public float h;
+	public Noeud n ;
 	
-	Noeud(int a, int b, float c){
+	Noeud(int a, int b, float c, Noeud n){
 		this.x=a;
 		this.y=b;
 		this.h=c;
+		this.n=n;
 
 	}
 	
