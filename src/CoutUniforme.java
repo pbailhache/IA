@@ -11,22 +11,18 @@ public class CoutUniforme {
 	private int[][] pos_visiter ;
 	private int pos_x, pos_y ,x,y;
 	LinkedList<Noeud> maListe = new LinkedList() ;
-	LinkedList<Noeud> liste_position = new LinkedList();
-	LinkedList<Noeud> liste_arrive = new LinkedList();
+	
 	LinkedList<Noeud> liste_chemin = new LinkedList();
 
 	
-	public CoutUniforme ( int[][] tab,int x, int y, int pos_x, int pos_y ){
+	public CoutUniforme ( int[][] tab,int x, int y, int pos_x, int pos_y, Noeud n){
 		this.laby = tab ;
 		this.x=x;
 		this.y=y;
 		this.pos_x = pos_x ;
 		this.pos_y = pos_y ;
 		this.pos_visiter = new int[y][x];
-		maListe.add(new Noeud(pos_x,pos_y,0,null));
-		//liste_arrive.add(new Noeud(pos_x,pos_y,0,null));
-		liste_position.add(new Noeud(pos_x,pos_y,0,null));
-		this.CoutUni(new Noeud(pos_x,pos_y,0,null));
+		maListe.add(n);
 		this.initTabPos();
 	}
 	
@@ -72,11 +68,9 @@ public class CoutUniforme {
 				|| ((laby[y][x+1]==1 ) && (laby[y-1][x]==1 ) && (laby[y+1][x]==1  ))
 					)			
 			{
-				System.out.println(x + "/" + y +" est une impasse");
 				return true ;
 			}
 			else {
-				System.out.println(x + "/" + y +" n'est pas une impasse");
 				return false ;
 			}
 			
@@ -115,18 +109,9 @@ public class CoutUniforme {
 		}
 		
 		if ( (g && d && h) || ( g && d && b) || ( h && b && g) || (h && b && d)){
-			System.out.println("Canard ! ");
-			System.out.println("d : " + d);
-			System.out.println("g : " + g);
-			System.out.println("h : " + h);
-			System.out.println("b : " + b);
 			return true ;
 		}
 		else {
-			System.out.println("d : " + d);
-			System.out.println("g : " + g);
-			System.out.println("h : " + h);
-			System.out.println("b : " + b);
 			return false ;
 		}
 	}
@@ -150,46 +135,68 @@ public class CoutUniforme {
 	}
 	
 	public LinkedList<Noeud> retourPere( Noeud n,LinkedList<Noeud> liste){
-		System.out.println(liste.isEmpty());
-		liste.add(new Noeud(5,3,6,null));
-		if ( n.n!=null ){
-			System.out.println(n.x+"/"+n.y);
-			System.out.println(n.h+" et "+n.n.x);			
+		System.out.println("retourPere");
+		if ( n.n!=null ){	
 			liste.add(n);
-			retourPere(n.n,liste);
+			System.out.println(n);
+			return retourPere(n.n,liste);
 		}
-		else {	
-			liste.add(n);
-			return liste ;
-		}
-		return null ;	
+		System.out.println(n);
+		liste.add(n);
+		return liste ;
+		
+	
 	}
 	
 	public LinkedList<Noeud> creationListeDeplacement( LinkedList<Noeud> listePos ,LinkedList<Noeud> listeArr){
+		System.out.println(listePos.isEmpty());
+		System.out.println(listeArr.isEmpty());
+
+		System.out.println("creationListeDeplacement");
 		Object[] tableau_pos = listePos.toArray();
 		Object[] tableau_arr = listeArr.toArray();
-		System.out.println("Tab pos : " +tableau_pos[0] );
-		System.out.println("Tab arr : " +tableau_pos[1] );
+		for ( int i = 0 ; i < tableau_pos.length; i++){
+			System.out.println("Tableau pos " + i +" : "+tableau_pos[i]);
+		}
+		System.out.println("Arr");
+		for ( int i = 0 ; i < tableau_arr.length; i++){
+			System.out.println("Tableau arr " + i +" : "+tableau_arr[i]);
+		}
 
 		int index_arr=0, index_pos=0 ;
-		for ( int i = 0 ; i < tableau_pos.length+1; i++){
-			for ( int j = 0 ; j < tableau_arr.length+1; j++){
+		Noeud n ;
+		for ( int i = 0 ; i < tableau_pos.length; i++){
+			for ( int j = 0 ; j < tableau_arr.length; j++){
 				if ( (Noeud)tableau_arr[j] == (Noeud)tableau_pos[i] ){
 					index_arr = j ;
 					index_pos = i ;
+					n = (Noeud)tableau_arr[j];
 					System.out.println("Trouver");
 					break;
 				}
-				System.out.println("Pas trouver ..... ************************************ ");
 			}
 		}
-		for ( int a = 0 ; a < index_pos+1 ; a++ ){
-			this.liste_chemin.add((Noeud)tableau_pos[a]);
+		
+		LinkedList<Noeud> liste_dep_mid = new LinkedList<Noeud>();
+		liste_dep_mid =	this.retourPere((Noeud)tableau_pos[0], liste_dep_mid);
+		LinkedList<Noeud> liste_mid_arr = new LinkedList<Noeud>();
+		liste_mid_arr =	this.retourPere((Noeud)tableau_arr[0], liste_mid_arr);
+
+		for ( int i = liste_mid_arr.size()-2 ; i>=0 ; i--){
+			liste_dep_mid.add(liste_mid_arr.get(i));
 		}
-		for ( int a = index_pos+1 ; a < index_arr+1 ; a++ ){
-			this.liste_chemin.add((Noeud)tableau_arr[a]);
-		}
-		return this.liste_position ;
+		//		for ( int a = 0 ; a < index_pos+1 ; a++ ){
+//			this.liste_chemin.add((Noeud)tableau_pos[a]);
+//		}
+//		for ( int a = index_pos+1 ; a < index_arr+1 ; a++ ){
+//			this.liste_chemin.add((Noeud)tableau_arr[a]);
+//		}
+		
+//		for ( int i = 0 ; i < liste_dep_mid.size() ; i++){
+//			System.out.println("Liste dep " + i +" : "+liste_dep_mid.get(i));
+//		}
+		
+		return liste_dep_mid ;
 	}
 	
 	public LinkedList<Noeud> fileOrdonne(LinkedList<Noeud> l){
@@ -199,8 +206,16 @@ public class CoutUniforme {
 	
 	// On lui donne le noeud ou on se trouve
 	public LinkedList<Noeud> CoutUni( Noeud n){
-		Noeud noeudCourant ; 		
-		if (!maListe.isEmpty()){			
+		LinkedList<Noeud> liste_position = new LinkedList<Noeud>();
+		LinkedList<Noeud> liste_arrive = new LinkedList<Noeud>();
+		Noeud noeudCourant ;
+		
+		
+		if (!maListe.isEmpty()){
+//			for ( int i = 0; i<maListe.size() ; i++){
+//				System.out.println("Liste  " + i + " : " + maListe.get(i) );
+//			}
+//			System.out.println("fgdfg");
 			noeudCourant = maListe.getFirst();
 			while (this.pos_visiter[noeudCourant.y][noeudCourant.x]==1 ){
 				maListe.removeFirst();
@@ -234,6 +249,10 @@ public class CoutUniforme {
 			}
 
 			fileOrdonne(maListe);
+//			System.out.println(n);
+//			for ( int i = 0; i<maListe.size() ; i++){
+//				System.out.println("Liste  " + i + " : " + maListe.get(i) );
+//			}
 			try {
 				Thread.currentThread().sleep(50);
 			} catch (InterruptedException e) {
@@ -241,27 +260,26 @@ public class CoutUniforme {
 				e.printStackTrace();
 			}
 			
-			System.out.println(this.liste_position.isEmpty());
-			System.out.println(this.liste_arrive.isEmpty());
-
 			// La liste contient tous les deplacements entre le n et le noeud courant ( donc la ou on se trouve )
-			this.liste_position = this.retourPere(n, this.liste_position);
-			System.out.println(this.liste_position.isEmpty());
-			System.out.println(noeudCourant.h);
-			System.out.println(this.liste_arrive.isEmpty());
-			this.liste_arrive = this.retourPere(noeudCourant, this.liste_arrive );
-			// Il faut chercher le plus près point commun !
-			System.out.println(noeudCourant.h);
-			if ( n.n != null ){
-				System.out.println(this.liste_position.isEmpty());
-				System.out.println(this.liste_arrive.isEmpty());
-	
-				this.liste_chemin = this.creationListeDeplacement(liste_position, liste_arrive);
-				this.afficheValeurPos();
-				return liste_chemin;
-			}
-			liste_chemin.add(noeudCourant);
-		}
+//			// En premier la liste à partir de la postion vers le noeud initial
+//			System.out.println("Liste Position");
+			liste_position = this.retourPere(n, liste_position);
+//			for ( int i = 0; i<liste_position.size() ; i++){
+//				System.out.println("liste_position  " + i + " : " + liste_position.get(i) );
+//			}
+//			// En 2eme la liste à partir du noeud courant jusqu'au noeud initial
+//			System.out.println("Liste Arrive");
+			liste_arrive = this.retourPere(noeudCourant,liste_arrive );
+//			for ( int i = 0; i<liste_arrive.size() ; i++){
+//				System.out.println("liste_arrive  " + i + " : " + liste_arrive.get(i) );
+//			}
+//			// Il faut chercher le plus près point commun !
+//			System.out.println("Neoud passer en parametre : " + n.h);
+//			
+			// On créais le chemin à faire pour se deplace de n a noeudcourant.
+			this.liste_chemin = this.creationListeDeplacement(liste_position, liste_arrive);
+			this.afficheValeurPos();
+			return liste_chemin;		}
 		//return new Noeud(0,0,0,null);
 		return liste_chemin;
 	}
