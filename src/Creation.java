@@ -275,17 +275,14 @@
 //		@Override
 //		public void mouseClicked(MouseEvent arg0) {
 //			// TODO Auto-generated method stub
-//			Noeud tmp1, last_pos ;
-//			Noeud tmp = new Noeud(pos_x,pos_y,0,null);
-//			LinkedList<Noeud> listeDep = new LinkedList();
-//			// ****************************************************
-//			if( this.menu_algo.getSelectedItem()=="Option 1"){
-//				
+////			Noeud tmp1, last_pos ;
+////			Noeud tmp = new Noeud(pos_x,pos_y,0,null);
+////			LinkedList<Noeud> listeDep = new LinkedList();
+////			// ****************************************************
+////			if( this.menu_algo.getSelectedItem()=="Option 1"){
+////				
 //				if ( this.uniforme==null){
-//					// J'initialise la classe CoutUniforme
 //					uniforme = new CoutUniforme(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, tmp);
-//					System.out.println(tmp);
-//					// On lance l'algo avec notre position courante et on recupere où on doit aller
 //					listeDep = uniforme.uniforme(tmp);
 //					
 //					last_pos = listeDep.getFirst() ;
@@ -294,35 +291,19 @@
 //					this.my_laby[noeud.y][noeud.x]=3;
 //					this.pos_x = noeud.x ;
 //					this.pos_y = noeud.y ;
-//					// Reactualisation de l'affichage ******************************************
-//					//this.my_panel.affichage(this.my_laby);
 //				}
 //				else {
 //					// COut uniforme deja initialiser, il suffit de lancer l'algo
 //					
 //					listeDep = uniforme.uniforme(noeud);
-//					System.out.println("Lise deplacement");
-//					for ( int i = 0; i<listeDep.size() ; i++){
-//						System.out.println("Liste  " + i + " : " + listeDep.get(i) );
-//						System.out.println("Position de x : " + listeDep.get(i).y +"/" + listeDep.get(i).x );
-//
-//					}
 //					last_pos = listeDep.getFirst() ;
 //					noeud=listeDep.getLast() ;
 //					this.my_laby[last_pos.y][last_pos.x]=3;
-//					System.out.println("Valeur de tmp : " + last_pos.y +"/" + last_pos.x + "    " +last_pos.h);
-//					System.out.println("Valeur de noeud : " + noeud.y +"/" + noeud.x + "    " +noeud.h);
+//	
 //					
 //					if (noeud.x == this.end_x && noeud.y ==end_y){
 //						LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
 //						liste_parcours_final = uniforme.retourPere(noeud, liste_parcours_final);
-//						for(int k =0 ; k < liste_parcours_final.size() ; k++){
-//							this.my_laby[liste_parcours_final.get(k).y][liste_parcours_final.get(k).x]=5;
-//						}
-//						// Reactualisation de l'affichage ******************************************
-//						//this.my_panel.affichage(this.my_laby);						
-//						this.pos_x = this.end_x ;
-//						this.pos_y = this.end_y ;
 //						System.out.println("ARRIVE");
 //					}
 ////					else {
@@ -330,8 +311,6 @@
 ////						this.my_laby[noeud.y][noeud.x]=3;
 ////						this.pos_x = noeud.x ;
 ////						this.pos_y = noeud.y ;
-////						// Reactualisation de l'affichage	
-////						this.my_panel.affichage(this.my_laby);
 ////					}
 //					else {
 //						System.out.println("Creation else 3");
@@ -539,7 +518,9 @@ public class Creation extends JFrame implements MouseListener{
 	//	 * - 5 : Chemin optimal vers la sortie
 	//	*/
 	private int[][] my_laby ;
-	public Noeud noeud ;	
+	public Noeud noeud ;
+	private Noeud oldPos;
+	
 	private Noeud oldDep;
 	private LinkedList<Noeud> listeDeplacementToDo = new LinkedList<Noeud>();
 	
@@ -676,12 +657,17 @@ public class Creation extends JFrame implements MouseListener{
 					if ( this.uniforme==null){
 						// J'initialise la classe CoutUniforme
 						uniforme = new CoutUniforme(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, this.end_x, this.end_y ,initial);
-						listeDeplacementToDo = uniforme.algo(initial);				
-						oldDep = listeDeplacementToDo.getFirst() ;
+						listeDep = uniforme.algo(initial);	
+						oldDep = listeDep.getFirst();
+						initial = listeDep.getLast();
+						listeDeplacementToDo.addAll(listeDep);
 					}
 					else {
+						
 						// COut uniforme deja initialiser, il suffit de lancer l'algo
-						listeDep = uniforme.algo(oldDep);
+						
+						listeDep = uniforme.algo(initial);
+						initial = listeDep.getLast();
 						noeudArr = listeDep.getFirst();
 	
 						// C'est la fin
@@ -758,13 +744,18 @@ public class Creation extends JFrame implements MouseListener{
 						if ( this.uniforme==null){
 							// J'initialise la classe CoutUniforme
 							uniforme = new CoutUniforme(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, this.end_x, this.end_y ,initial);
-							listeDeplacementToDo = uniforme.algo(initial);				
-							oldDep = listeDeplacementToDo.getFirst() ;
+							listeDep = uniforme.algo(initial);	
+							oldDep = listeDep.getFirst();
+							initial = listeDep.getLast();
+							listeDeplacementToDo.addAll(listeDep);
 						}
 						else {
+							
 							// COut uniforme deja initialiser, il suffit de lancer l'algo
-							listeDep = uniforme.algo(oldDep);
-							noeudArr = listeDep.getLast();
+							
+							listeDep = uniforme.algo(initial);
+							initial = listeDep.getLast();
+							noeudArr = listeDep.getFirst();
 		
 							// C'est la fin
 							if (noeudArr.x == this.end_x && noeudArr.y ==end_y){
