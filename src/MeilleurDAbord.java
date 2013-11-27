@@ -1,164 +1,66 @@
-//import java.util.Collections;
-//import java.util.LinkedList;
-//import java.math.*;
-//
-//
-//public class MeilleurDAbord {
-//
-//	private int[][] laby ;
-//	private int[][] pos_visiter ;
-//	private float[][] tableau_valeur ;
-//	private int pos_x, pos_y ,x,y,end_x,end_y;
-//	LinkedList<Noeud> maListe = new LinkedList() ;
-//
-//	
-//	public MeilleurDAbord ( int[][] tab,int x, int y, int pos_x, int pos_y, int end_x, int end_y ){
-//		this.laby = tab ;
-//		this.x=x;
-//		this.y=y;
-//		this.end_x = end_x ;
-//		this.end_y = end_y ;
-//		this.pos_x = pos_x ;
-//		this.pos_y = pos_y ;
-//		this.pos_visiter = new int[y][x];
-//		this.tableau_valeur = new float[y][x];
-//		this.initTabValeur();
-//		this.initTabPos();
-//		this.donneValeur(end_x, end_y);
-//		maListe.add(new Noeud(pos_x,pos_y,tableau_valeur[pos_y][pos_x]));
-//
-//	}
-//	
-//	public void donneValeur(int x, int y){
-//		this.tableau_valeur[y][x]=(float) Math.sqrt((x-end_x)*(x-end_x) + (y-end_y)*(y-end_y));
-//		if ( y>0){
-//			if ( this.tableau_valeur[y-1][x] == -1){
-//				donneValeur(x,y-1);
-//			}
-//		}
-//		
-//		if ( x>0){
-//			if (this.tableau_valeur[y][x-1] == -1){
-//				donneValeur(x-1,y);
-//			}
-//		}
-//		if (x<this.x-1 ){
-//			if (this.tableau_valeur[y][x+1] == -1){
-//				donneValeur(x+1,y);
-//			}
-//		}
-//		if ( y<this.y-1){
-//			if (this.tableau_valeur[y+1][x] == -1){
-//				donneValeur(x,y+1);
-//			}
-//		}
-//	
-//}
-//	
-//	public void initTabPos(){
-//		for ( int j = 0 ; j<this.y;j++){
-//			for ( int i = 0 ; i<this.x;i++){
-//				this.pos_visiter[j][i]=0;			
-//			}
-//		}		
-//	}
-//	
-//	public void initTabValeur(){
-//		for ( int j = 0 ; j<this.y;j++){
-//			for ( int i = 0 ; i<this.x;i++){
-//				this.tableau_valeur[j][i]=-1;			
-//			}
-//		}		
-//	}
-//	
-//	public void afficheValeur(){
-//		for ( int j = 0 ; j<this.y;j++){
-//			for ( int i = 0 ; i<this.x;i++){
-//				System.out.print(this.tableau_valeur[j][i] +" | ");			
-//			}
-//			System.out.println();
-//		}	
-//	}
-//	
-//	
-//	public void afficheValeurPos(){
-//		for ( int j = 0 ; j<this.y;j++){
-//			for ( int i = 0 ; i<this.x;i++){
-//				System.out.print(this.pos_visiter[j][i] +" | ");			
-//			}
-//			System.out.println();
-//		}
-//	}
-//		
-//	
-//	public boolean testBut(Noeud n){
-//		if (tableau_valeur[n.y][n.x]==0){
-//			return true ;
-//		}
-//		else {
-//			return false ;
-//		}
-//	}
-//	
-//	public boolean isValide(int x, int y){
-//		
-//		if ( (laby[y][x]!=1) && (this.pos_visiter[y][x] == 0)){
-//			return true ;
-//		}
-//		else {
-//			return false;
-//		}
-//	}
-//	
-//	public LinkedList<Noeud> fileOrdonne(LinkedList<Noeud> l){
-//		Collections.sort(l,Noeud.noeudComparator);
-//		return l ;
-//	}
-//	
-//	public Noeud meilleurDAb(){
-//		Noeud noeudCourant ; 		
-//		if (!maListe.isEmpty()){			
-//			noeudCourant = maListe.getFirst();
-//			while (this.pos_visiter[noeudCourant.y][noeudCourant.x]==1 ){
-//				maListe.removeFirst();
-//				noeudCourant = maListe.getFirst();
-//			}
-//			this.pos_visiter[noeudCourant.y][noeudCourant.x]=1;
-//			maListe.removeFirst();
-//			
-//			if (testBut(noeudCourant)){
-//				System.out.println("FINI !!!!!!!!!!");
-//				maListe.clear();
-//				return noeudCourant ;
-//			}
-//			else {		
-//					
-//					if (isValide(noeudCourant.x,noeudCourant.y-1)){
-//						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,tableau_valeur[noeudCourant.y-1][noeudCourant.x]));
-//					}
-//					if (isValide(noeudCourant.x-1,noeudCourant.y)){
-//						maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x-1]));
-//					}
-//					if (isValide(noeudCourant.x+1,noeudCourant.y)){
-//						maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x+1]));
-//					}
-//					if (isValide(noeudCourant.x,noeudCourant.y+1)){
-//						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,tableau_valeur[noeudCourant.y+1][noeudCourant.x]));
-//					}
-//			}
-//
-//			fileOrdonne(maListe);
-//			try {
-//				Thread.currentThread().sleep(50);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			this.afficheValeurPos(); 
-//			return maListe.getFirst();
-//		}
-//		return new Noeud(0,0,0);
-//	}
-//	
-//	
-//}
+import java.util.LinkedList;
+
+
+public class MeilleurDAbord extends Algorithme{
+
+	public MeilleurDAbord(int[][] tab, int x, int y, int pos_x, int pos_y, int end_x, int end_y, Noeud n) {
+		super(tab, x, y, pos_x, pos_y, end_x, end_y, n);
+		// Initialise le tableau des valeurs
+		System.out.println("*********" + end_y +"/"+end_x);
+		super.donneValeur(end_x, end_y, 0);
+		super.afficheValeurValeur();
+	}
+	
+	@Override
+	// On lui donne le noeud ou on se trouve et il rajoute ou non les noeuds autour de lui dans la liste
+		// des cases à visiter
+			public LinkedList<Noeud> algo( Noeud n){
+				LinkedList<Noeud> liste_deplacement_depuis_position = new LinkedList<Noeud>();
+				LinkedList<Noeud> liste_deplacement_depuis_arrive = new LinkedList<Noeud>();
+				LinkedList<Noeud> liste_chemin = new LinkedList<Noeud>();
+				Noeud noeudCourant ;				
+				if (!maListe.isEmpty()){
+					noeudCourant = maListe.getFirst();
+					// Je fais une boucle car il faut vérifier que l'on n'a pas deja visiter cette case
+					while (this.pos_visiter[noeudCourant.y][noeudCourant.x]==1 ){
+						maListe.removeFirst();
+						noeudCourant = maListe.getFirst();
+					}
+					this.pos_visiter[noeudCourant.y][noeudCourant.x]=1;
+					maListe.removeFirst();				
+
+					// Il y a cases autour, on les tests pour savoir si elle mèene a une impasse et si on peut y accèder 
+					if (!isImpasse(noeudCourant.x+1,noeudCourant.y,vision) &&  isValide(noeudCourant.x+1,noeudCourant.y)){
+						maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x+1],noeudCourant));
+					}
+					if (!isImpasse(noeudCourant.x-1,noeudCourant.y,vision) && isValide(noeudCourant.x-1,noeudCourant.y)){
+						maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x-1],noeudCourant));
+					}
+					if (!isImpasse(noeudCourant.x,noeudCourant.y+1,vision)&& isValide(noeudCourant.x,noeudCourant.y+1)){
+						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,tableau_valeur[noeudCourant.y+1][noeudCourant.x],noeudCourant));
+					}
+					if (!isImpasse(noeudCourant.x,noeudCourant.y-1,vision) && isValide(noeudCourant.x,noeudCourant.y-1)){
+						maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,tableau_valeur[noeudCourant.y-1][noeudCourant.x],noeudCourant));
+					}
+					
+					// On ordonne notre liste
+					fileOrdonne(maListe);
+					for ( int i = 0; i<maListe.size() ; i++){
+						System.out.println("Liste  " + i + " : " + maListe.get(i) );
+					}
+					// On remplit nos liste de deplacements
+					liste_deplacement_depuis_position = this.retourPere(n, liste_deplacement_depuis_position);
+					liste_deplacement_depuis_arrive = this.retourPere(noeudCourant,liste_deplacement_depuis_arrive );
+					// On fait la liste des deplacement à effectuer pour aller du noeud où on se trouve au neud courant
+					liste_chemin = this.creationListeDeplacement(liste_deplacement_depuis_position, liste_deplacement_depuis_arrive);
+					return liste_chemin;		
+				}
+				return liste_chemin;
+			}
+	
+	
+	
+	
+
+	
+}
