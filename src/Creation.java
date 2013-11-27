@@ -37,7 +37,10 @@ public class Creation extends JFrame implements MouseListener{
 	// Le tableau qui va contenir les 0/1/2
 	private int[][] my_laby ;
 	public Noeud noeud ;
-	private LinkedList<Noeud> OldlisteDep = new LinkedList<Noeud>();
+	
+	
+	private Noeud oldDep;
+	private LinkedList<Noeud> listeDeplacementToDo = new LinkedList<Noeud>();
 	
 	public Creation (){
 		super("Porjet Labyrinthe");
@@ -218,6 +221,7 @@ public class Creation extends JFrame implements MouseListener{
 					noeud = listeDep.getLast() ;
 					my_laby[pos_y][pos_x]=4;
 					my_laby[noeud.y][noeud.x]=3;
+					oldDep = noeud;
 					this.pos_x = noeud.x ;
 					this.pos_y = noeud.y ;
 					// Reactualisation de l'affichage ******************************************
@@ -271,42 +275,41 @@ public class Creation extends JFrame implements MouseListener{
 						}
 						
 						
-						int old_x = pos_x;
-						int old_y = pos_y;
-						for(int k =0 ; k < listeDep.size() ; k++)
-						{
-
-							my_laby[old_y][old_x]=4;
-							Noeud to_visit = listeDep.get(k);
-							
-							my_laby[to_visit.y][to_visit.x]=3;
-							// Reactualisation de l'affichage ******************************************
-							//this.my_panel.affichage(my_laby);
-							old_x = to_visit.x;
-							old_y = to_visit.y;
-							my_panel.setLaby(this.my_laby);
-							
-//							try {
-//								Thread.sleep(5000);
-//							} catch (InterruptedException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-
-//							System.out.println("***********");
-//							System.out.println(to_visit.y + "/" + to_visit.x);
-//							System.out.println(my_laby[to_visit.y][to_visit.x]);
-//							int[][] tmpTab = my_panel.getLaby();
-//							System.out.println(tmpTab[to_visit.y][to_visit.x]);
-//							System.out.println("--------------------------------------------");
-//							this.affiche(my_laby);
-//							System.out.println("--------------------------------------------");
-//							this.affiche(tmpTab);
-//							System.out.println("--------------------------------------------");
-						}
+						listeDeplacementToDo.addAll(listeDep);
+//						for(int k =0 ; k < listeDep.size() ; k++)
+//						{
+//
+//							my_laby[old_y][old_x]=4;
+//							Noeud to_visit = listeDep.get(k);
+//							
+//							my_laby[to_visit.y][to_visit.x]=3;
+//							// Reactualisation de l'affichage ******************************************
+//							//this.my_panel.affichage(my_laby);
+//							old_x = to_visit.x;
+//							old_y = to_visit.y;
+//							my_panel.setLaby(this.my_laby);
+//							
+////							try {
+////								Thread.sleep(5000);
+////							} catch (InterruptedException e) {
+////								// TODO Auto-generated catch block
+////								e.printStackTrace();
+////							}
+//
+////							System.out.println("***********");
+////							System.out.println(to_visit.y + "/" + to_visit.x);
+////							System.out.println(my_laby[to_visit.y][to_visit.x]);
+////							int[][] tmpTab = my_panel.getLaby();
+////							System.out.println(tmpTab[to_visit.y][to_visit.x]);
+////							System.out.println("--------------------------------------------");
+////							this.affiche(my_laby);
+////							System.out.println("--------------------------------------------");
+////							this.affiche(tmpTab);
+////							System.out.println("--------------------------------------------");
+//						}
 						
-						OldlisteDep = listeDep;
-						my_panel.setLaby(this.my_laby);
+//						OldlisteDep = listeDep;
+//						my_panel.setLaby(this.my_laby);
 
 //						while ( !listeDep.isEmpty() ){
 //							my_laby[pos_y][pos_x]=4;
@@ -413,9 +416,10 @@ public class Creation extends JFrame implements MouseListener{
 			
 			while (true)
 			{
+				my_lab.affichDeplacement();
 				my_lab.my_panel.affichage(my_lab.my_panel.getLaby());
 				try {
-					Thread.sleep(70);
+					Thread.sleep(250);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -423,6 +427,19 @@ public class Creation extends JFrame implements MouseListener{
 			}
 		
 		}
+
+	private void affichDeplacement() 
+	{
+		// TODO Auto-generated method stub
+		if(!listeDeplacementToDo.isEmpty())
+		{
+			Noeud currentDep = listeDeplacementToDo.removeFirst();
+			my_laby[oldDep.y][oldDep.x]=4;
+			my_laby[currentDep.y][currentDep.x]=3;
+			this.my_panel.affichage(my_laby);
+			oldDep = currentDep;
+		}
+	}
 		
 		
 	
