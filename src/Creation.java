@@ -37,6 +37,7 @@ public class Creation extends JFrame implements MouseListener{
 	// Le tableau qui va contenir les 0/1/2
 	private int[][] my_laby ;
 	public Noeud noeud ;
+	private LinkedList<Noeud> OldlisteDep = new LinkedList<Noeud>();
 	
 	public Creation (){
 		super("Porjet Labyrinthe");
@@ -44,7 +45,7 @@ public class Creation extends JFrame implements MouseListener{
 		this.ReadFile("laby.txt");
 		System.out.println(x+"/"+y);
 		this.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE) ;
-		this.setPreferredSize(new Dimension (600,300));
+		this.setPreferredSize(new Dimension (600,600));
 		
 		
 		// ****** Initialisation
@@ -75,7 +76,7 @@ public class Creation extends JFrame implements MouseListener{
 		//creationJPanel();
 		my_panel = new Laby(x,y,pos_x,pos_y,end_x,end_y,my_laby,this);
 		// Lacnement de l'affichage
-		my_panel.startAff();
+		//my_panel.startAff();
 		// ******** Ajout dans la frame
 		this.add(box_haut,BorderLayout.NORTH);
 		this.add(box_bas,BorderLayout.SOUTH);
@@ -225,6 +226,7 @@ public class Creation extends JFrame implements MouseListener{
 				else {
 					// COut uniforme deja initialiser, il suffit de lancer l'algo
 					
+					
 					listeDep = coutUni.CoutUni(noeud);
 					System.out.println("Lise deplacement");
 					for ( int i = 0; i<listeDep.size() ; i++){
@@ -276,6 +278,7 @@ public class Creation extends JFrame implements MouseListener{
 
 							my_laby[old_y][old_x]=4;
 							Noeud to_visit = listeDep.get(k);
+							
 							my_laby[to_visit.y][to_visit.x]=3;
 							// Reactualisation de l'affichage ******************************************
 							//this.my_panel.affichage(my_laby);
@@ -283,24 +286,27 @@ public class Creation extends JFrame implements MouseListener{
 							old_y = to_visit.y;
 							my_panel.setLaby(this.my_laby);
 							
+//							try {
+//								Thread.sleep(5000);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
 
-							System.out.println("***********");
-							System.out.println(to_visit.y + "/" + to_visit.x);
-							System.out.println(my_laby[to_visit.y][to_visit.x]);
-							int[][] tmpTab = my_panel.getLaby();
-							System.out.println(tmpTab[to_visit.y][to_visit.x]);
-							System.out.println("--------------------------------------------");
-							this.affiche(my_laby);
-							System.out.println("--------------------------------------------");
-							this.affiche(tmpTab);
-							System.out.println("--------------------------------------------");
-							try {
-								Thread.sleep(100);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}						
+//							System.out.println("***********");
+//							System.out.println(to_visit.y + "/" + to_visit.x);
+//							System.out.println(my_laby[to_visit.y][to_visit.x]);
+//							int[][] tmpTab = my_panel.getLaby();
+//							System.out.println(tmpTab[to_visit.y][to_visit.x]);
+//							System.out.println("--------------------------------------------");
+//							this.affiche(my_laby);
+//							System.out.println("--------------------------------------------");
+//							this.affiche(tmpTab);
+//							System.out.println("--------------------------------------------");
 						}
+						
+						OldlisteDep = listeDep;
+						my_panel.setLaby(this.my_laby);
 
 //						while ( !listeDep.isEmpty() ){
 //							my_laby[pos_y][pos_x]=4;
@@ -404,6 +410,17 @@ public class Creation extends JFrame implements MouseListener{
 			my_lab.setLocationRelativeTo (null);
 			my_lab.pack ();
 			my_lab.setVisible (true);
+			
+			while (true)
+			{
+				my_lab.my_panel.affichage(my_lab.my_panel.getLaby());
+				try {
+					Thread.sleep(70);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		
 		}
 		
