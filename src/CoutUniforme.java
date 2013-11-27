@@ -134,6 +134,18 @@ public class CoutUniforme {
 		}
 	}
 	
+	public LinkedList<Noeud> retourAuNoeudCommun( Noeud n,LinkedList<Noeud> liste, Noeud nfin){
+		System.out.println("retourAuNoeudCommun");
+		if (  n.n!=null  && n!=nfin ){	
+				liste.add(n);
+				System.out.println(n);
+				return retourAuNoeudCommun(n.n,liste, nfin);
+		}
+		liste.add(n);
+		return liste ;
+		
+	}
+	
 	public LinkedList<Noeud> retourPere( Noeud n,LinkedList<Noeud> liste){
 		System.out.println("retourPere");
 		if ( n.n!=null ){	
@@ -164,37 +176,53 @@ public class CoutUniforme {
 		}
 
 		int index_arr=0, index_pos=0 ;
-		Noeud n ;
+		boolean trouver = false ;
+		Noeud n = new Noeud(0,0,0,null) ;
+		//for ( int i = tableau_pos.length-1 ; i >= 0 ; i--){
 		for ( int i = 0 ; i < tableau_pos.length; i++){
-			for ( int j = 0 ; j < tableau_arr.length; j++){
-				if ( (Noeud)tableau_arr[j] == (Noeud)tableau_pos[i] ){
-					index_arr = j ;
-					index_pos = i ;
-					n = (Noeud)tableau_arr[j];
-					System.out.println("Trouver");
-					break;
+			if ( !trouver){
+				for ( int j = 0 ; j < tableau_arr.length; j++){
+				//for ( int j = tableau_arr.length-1 ; j >= 0 ; j--){
+					
+					if ( (Noeud)tableau_arr[j] == (Noeud)tableau_pos[i] ){
+						index_arr = j ;
+						index_pos = i ;
+						
+						n = (Noeud)tableau_arr[j];
+						System.out.println("Index Trouver : " + n.y +"/" +n.x );
+						System.out.println("Trouver");
+						trouver = true ;
+						break;
+					}
 				}
+			}else{
+				break;
 			}
+				
 		}
-		
 		LinkedList<Noeud> liste_dep_mid = new LinkedList<Noeud>();
-		liste_dep_mid =	this.retourPere((Noeud)tableau_pos[0], liste_dep_mid);
+		liste_dep_mid =	this.retourAuNoeudCommun((Noeud)tableau_pos[0], liste_dep_mid,n);
 		LinkedList<Noeud> liste_mid_arr = new LinkedList<Noeud>();
-		liste_mid_arr =	this.retourPere((Noeud)tableau_arr[0], liste_mid_arr);
+		System.out.println("Index Trouver : " + n.y +"/" +n.x );
 
+		liste_mid_arr =	this.retourAuNoeudCommun((Noeud)tableau_arr[0], liste_mid_arr,n);
+
+//				for ( int a = 0 ; a < index_pos+1 ; a++ ){
+//					liste_dep_mid.add((Noeud)tableau_pos[a]);
+//				}
+//				for ( int a = index_pos+1 ; a < index_arr+1 ; a++ ){
+//					liste_dep_mid.add((Noeud)tableau_arr[a]);
+//				}
+				
+//				for ( int i = 0 ; i < liste_dep_mid.size() ; i++){
+//					System.out.println("Liste dep " + i +" : "+liste_dep_mid.get(i));
+//				}
+//
+//		
 		for ( int i = liste_mid_arr.size()-2 ; i>=0 ; i--){
 			liste_dep_mid.add(liste_mid_arr.get(i));
 		}
-		//		for ( int a = 0 ; a < index_pos+1 ; a++ ){
-//			this.liste_chemin.add((Noeud)tableau_pos[a]);
-//		}
-//		for ( int a = index_pos+1 ; a < index_arr+1 ; a++ ){
-//			this.liste_chemin.add((Noeud)tableau_arr[a]);
-//		}
-		
-//		for ( int i = 0 ; i < liste_dep_mid.size() ; i++){
-//			System.out.println("Liste dep " + i +" : "+liste_dep_mid.get(i));
-//		}
+
 		
 		return liste_dep_mid ;
 	}
