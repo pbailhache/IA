@@ -7,10 +7,8 @@ public class AStar extends Algorithme{
 		super(tab, x, y, pos_x, pos_y, end_x, end_y, n);
 		// Initialise le tableau des valeurs
 		super.donneValeur(end_x, end_y, 0);
-		this.algo(n);
 	}
 	
-	@Override
 	// On lui donne le noeud ou on se trouve et il rajoute ou non les noeuds autour de lui dans la liste
 			// des cases à visiter
 				public LinkedList<Noeud> algo( Noeud n){
@@ -29,16 +27,16 @@ public class AStar extends Algorithme{
 						maListe.removeFirst();				
 
 						// Il y a cases autour, on les tests pour savoir si elle mèene a une impasse et si on peut y accèder 
-						if (!isImpasse(noeudCourant.x+1,noeudCourant.y,vision) &&  isValide(noeudCourant.x+1,noeudCourant.y)){
+						if (!isImpasse(noeudCourant.x+1,noeudCourant.y,vision,x,y) &&  isValide(noeudCourant.x+1,noeudCourant.y)){
 							maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x+1]+1+(noeudCourant.heuristique-tableau_valeur[noeudCourant.y][noeudCourant.x]),noeudCourant));
 						}
-						if (!isImpasse(noeudCourant.x-1,noeudCourant.y,vision) && isValide(noeudCourant.x-1,noeudCourant.y)){
+						if (!isImpasse(noeudCourant.x-1,noeudCourant.y,vision,x,y) && isValide(noeudCourant.x-1,noeudCourant.y)){
 							maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,tableau_valeur[noeudCourant.y][noeudCourant.x-1]+1+(noeudCourant.heuristique-tableau_valeur[noeudCourant.y][noeudCourant.x]),noeudCourant));
 						}
-						if (!isImpasse(noeudCourant.x,noeudCourant.y+1,vision)&& isValide(noeudCourant.x,noeudCourant.y+1)){
+						if (!isImpasse(noeudCourant.x,noeudCourant.y+1,vision,x,y)&& isValide(noeudCourant.x,noeudCourant.y+1)){
 							maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,tableau_valeur[noeudCourant.y+1][noeudCourant.x]+1+(noeudCourant.heuristique-tableau_valeur[noeudCourant.y][noeudCourant.x]),noeudCourant));
 						}
-						if (!isImpasse(noeudCourant.x,noeudCourant.y-1,vision) && isValide(noeudCourant.x,noeudCourant.y-1)){
+						if (!isImpasse(noeudCourant.x,noeudCourant.y-1,vision,x,y) && isValide(noeudCourant.x,noeudCourant.y-1)){
 							maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,tableau_valeur[noeudCourant.y-1][noeudCourant.x]+1+(noeudCourant.heuristique-tableau_valeur[noeudCourant.y][noeudCourant.x]),noeudCourant));
 						}
 						
