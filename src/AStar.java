@@ -7,6 +7,7 @@ public class AStar extends Algorithme{
 		super(tab, x, y, pos_x, pos_y, end_x, end_y, n);
 		// Initialise le tableau des valeurs
 		super.donneValeur(end_x, end_y, 0);
+		this.algo(n);
 	}
 	
 	@Override

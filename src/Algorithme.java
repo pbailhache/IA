@@ -279,12 +279,15 @@ public class Algorithme {
 	
 	// Permet de retourner une liste de noeud en partant de n et en allant jusqu'au noeud initial
 	public LinkedList<Noeud> retourPere( Noeud n,LinkedList<Noeud> liste){
+	if ( n != null){
 		if ( n.noeud_pere!=null ){	
 			liste.add(n);
 			return retourPere(n.noeud_pere,liste);
 		}
 		liste.add(n);
 		return liste ;
+		}
+	return null ;
 	}
 	
 	// Ici on a 2 listes, et à partir de celle-ci on veux en créais une troisième qui ira de notre position actuel

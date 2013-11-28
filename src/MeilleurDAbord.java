@@ -6,9 +6,8 @@ public class MeilleurDAbord extends Algorithme{
 	public MeilleurDAbord(int[][] tab, int x, int y, int pos_x, int pos_y, int end_x, int end_y, Noeud n) {
 		super(tab, x, y, pos_x, pos_y, end_x, end_y, n);
 		// Initialise le tableau des valeurs
-		System.out.println("*********" + end_y +"/"+end_x);
 		super.donneValeur(end_x, end_y, 0);
-		super.afficheValeurValeur();
+		
 	}
 	
 	@Override

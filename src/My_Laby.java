@@ -1,11 +1,19 @@
 import java.awt.Color;
+
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -26,10 +34,11 @@ public class My_Laby extends JPanel{
 	*/
 	public int[][] my_laby,old_laby ;
 	private JFrame my_frame ;
+	private Image  herbe,arbre ;
 	
 		
 		// Constructeur de la classe !
-			public My_Laby (int x, int y, int pos_x, int pos_y, int end_x, int end_y, int[][] tab, JFrame frame ){
+			public My_Laby (int x, int y, int pos_x, int pos_y, int end_x, int end_y, int[][] tab, JFrame frame ) {
 				super();
 				this.x=x;
 				this.y=y;
@@ -41,7 +50,6 @@ public class My_Laby extends JPanel{
 				this.my_frame = frame ;
 				this.old_laby = null;	
 				this.setLayout(new GridLayout(this.y+1,this.x+1));
-			
 			}
 		
 		
@@ -59,50 +67,49 @@ public class My_Laby extends JPanel{
 		// Permet de remplir mon JPanel de multiple JPanel avec une couleur particulière
 		// en fonction de l'indice présent sur la case du tableau.
 		public void affichage( int[][] tab){
-			this.removeAll();
 			JPanel my_panel ;
-			for (int j=0; j<this.y;j++){
-				for (int i =0; i<this.x;i++){
-					if ( this.my_laby[j][i]==4){
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.GREEN);
-						this.add(my_panel);
-					}
-					else if ( this.my_laby[j][i]==3){
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.RED);
-						this.add(my_panel);
-					}
-					
-					else if ( this.my_laby[j][i]==2){
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.YELLOW);
-						this.add(my_panel);
-					}
-					else if ( this.my_laby[j][i]==1){
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.BLACK);
-						this.add(my_panel);
-					}
-					else if ( this.my_laby[j][i]==5){
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.BLUE);
-						this.add(my_panel);
-					}
-					else {
-						my_panel = new JPanel();
-						my_panel.setBorder(new LineBorder(Color.WHITE, 1));
-						my_panel.setBackground(Color.GRAY);
-						this.add(my_panel);
+			this.removeAll();
+				for (int j=0; j<this.y;j++){
+					for (int i =0; i<this.x;i++){
+						if ( this.my_laby[j][i]==4){
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.GREEN);
+							this.add(my_panel);
+						}
+						else if ( this.my_laby[j][i]==3){
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.RED);
+							this.add(my_panel);
+						}
+						
+						else if ( this.my_laby[j][i]==2){
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.YELLOW);
+							this.add(my_panel);
+						}
+						else if ( this.my_laby[j][i]==1){
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.BLACK);
+							this.add(my_panel);
+						}
+						else if ( this.my_laby[j][i]==5){
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.BLUE);
+							this.add(my_panel);
+						}
+						else {
+							my_panel = new JPanel();
+							my_panel.setBorder(new LineBorder(Color.WHITE, 1));
+							my_panel.setBackground(Color.GRAY);
+							this.add(my_panel);
+						}
 					}
 				}
-			}
-			
 			this.my_frame.pack();
 		}
 		
