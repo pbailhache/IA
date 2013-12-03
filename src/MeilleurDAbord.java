@@ -18,14 +18,12 @@ public class MeilleurDAbord extends Algorithme{
 				LinkedList<Noeud> liste_chemin = new LinkedList<Noeud>();
 				Noeud noeudCourant ;				
 				if (!maListe.isEmpty()){
-					noeudCourant = maListe.getFirst();
+					noeudCourant = maListe.removeFirst();
 					// Je fais une boucle car il faut vérifier que l'on n'a pas deja visiter cette case
 					while (this.pos_visiter[noeudCourant.y][noeudCourant.x]==1 ){
-						maListe.removeFirst();
-						noeudCourant = maListe.getFirst();
+						noeudCourant = maListe.removeFirst();
 					}
 					this.pos_visiter[noeudCourant.y][noeudCourant.x]=1;
-					maListe.removeFirst();				
 
 					// Il y a cases autour, on les tests pour savoir si elle mèene a une impasse et si on peut y accèder 
 					if (!isImpasse(noeudCourant.x+1,noeudCourant.y,vision,x,y) &&  isValide(noeudCourant.x+1,noeudCourant.y)){
@@ -43,9 +41,7 @@ public class MeilleurDAbord extends Algorithme{
 					
 					// On ordonne notre liste
 					fileOrdonne(maListe);
-					for ( int i = 0; i<maListe.size() ; i++){
-						System.out.println("Liste  " + i + " : " + maListe.get(i) );
-					}
+					
 					// On remplit nos liste de deplacements
 					liste_deplacement_depuis_position = this.retourPere(n, liste_deplacement_depuis_position);
 					liste_deplacement_depuis_arrive = this.retourPere(noeudCourant,liste_deplacement_depuis_arrive );

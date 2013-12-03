@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.util.LinkedList;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -37,7 +38,7 @@ public class Creation extends JFrame implements MouseListener{
 	private AStar star = null ;
 	
 	// Variable
-	private File file = new File("C:\\Users\\Ptit\\workspace\\Laby2\\laby2.txt");
+	private File file = new File("C:\\Users\\Ptit\\workspace\\Laby2\\laby.txt");
 	private My_Laby my_panel ;
 	private Timer timer ;
 	private Popup popup ;
@@ -45,7 +46,7 @@ public class Creation extends JFrame implements MouseListener{
 	private JButton button_next, button_fin, button_quit ;
 	private JComboBox<String> menu_algo ;
 	private Box box_bas ;
-	private int x,y,pos_x,pos_y,end_x,end_y;
+	private int x,y,pos_x,pos_y,end_x,end_y,nombreCout=-1;
 	
 	/* my_laby ca contenir un tableau remplit de integer allant de 0 a 5 :
 	//	 * - 0 : couloir inexploré
@@ -193,6 +194,7 @@ public class Creation extends JFrame implements MouseListener{
 			// ****************************************************
 			//  			Bouton Next
 			if ( source == button_next && this.pos_x != this.end_x && this.pos_y != this.end_y){	
+				nombreCout++;
 				// ****************************************************
 				//   			Cout Uniforme
 				if( this.menu_algo.getSelectedItem()=="Cout Uniforme" && this.meilleur==null && this.star==null){	
@@ -206,11 +208,12 @@ public class Creation extends JFrame implements MouseListener{
 						this.pos_x = noeudArr.x;
 						this.pos_y = noeudArr.y;
 						listeDeplacementToDo.addAll(listeDep);
+						nombreCout++;
 						listeDep = uniforme.algo(oldDep);
 						noeudArr = listeDep.getLast();
 						initial = listeDep.getFirst();
 						listeDeplacementToDo.addAll(listeDep);
-
+						
 					}
 					// Cout uniforme deja initialiser, il suffit de lancer l'algo
 					else {					
@@ -236,7 +239,6 @@ public class Creation extends JFrame implements MouseListener{
 				else if (this.menu_algo.getSelectedItem()=="Meilleur d'Abord"  && this.uniforme==null && this.star==null){
 					// Si meilleur n'est pas créé
 					if ( this.meilleur==null){
-						System.out.println("toto");
 						meilleur = new MeilleurDAbord(this.my_laby,this.x,this.y, this.pos_x, this.pos_y, this.end_x, this.end_y ,initial);
 						listeDep = meilleur.algo(initial);	
 						oldDep = listeDep.getFirst();
@@ -244,6 +246,7 @@ public class Creation extends JFrame implements MouseListener{
 						this.pos_x = noeudArr.x;
 						this.pos_y = noeudArr.y;
 						listeDeplacementToDo.addAll(listeDep);
+						nombreCout++;
 						listeDep = meilleur.algo(oldDep);
 						noeudArr = listeDep.get(1);
 						initial = listeDep.getFirst();
@@ -282,6 +285,7 @@ public class Creation extends JFrame implements MouseListener{
 						this.pos_x = noeudArr.x;
 						this.pos_y = noeudArr.y;
 						listeDeplacementToDo.addAll(listeDep);
+						nombreCout++;
 						listeDep = star.algo(oldDep);
 						noeudArr = listeDep.getLast();
 						initial = listeDep.getFirst();
@@ -325,7 +329,7 @@ public class Creation extends JFrame implements MouseListener{
 				boolean isFini = false;
 				// La même chose que précedement mais on le lance dans une boucle
 				while ( !isFini ){
-
+					nombreCout++;
 						// ****************************************************
 						// 					Cout Uniforme
 						if( this.menu_algo.getSelectedItem()=="Cout Uniforme"){	
@@ -335,9 +339,8 @@ public class Creation extends JFrame implements MouseListener{
 								listeDep = uniforme.algo(initial);	
 								oldDep = listeDep.getFirst();
 								noeudArr = listeDep.getLast();
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
-								listeDeplacementToDo.addAll(listeDep);
+								//listeDeplacementToDo.addAll(listeDep);
+
 							}
 							else {
 								
@@ -345,19 +348,22 @@ public class Creation extends JFrame implements MouseListener{
 								listeDep = uniforme.algo(oldDep);
 								oldDep = listeDep.getLast();
 								noeudArr = listeDep.getLast();
-								initial = listeDep.getFirst();	
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
 								// C'est la fin
 								if (noeudArr.x == this.end_x && noeudArr.y ==end_y){
-									listeDeplacementToDo.addAll(listeDep);
-									LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
-									liste_parcours_final = uniforme.retourPere(noeudArr, liste_parcours_final);
-									listeArrive.addAll(liste_parcours_final);
+									//listeDeplacementToDo.addAll(listeDep);
+									//LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
+									//liste_parcours_final = uniforme.retourPere(noeudArr, liste_parcours_final);
+									//listeArrive.addAll(liste_parcours_final);
+									try {
+										this.addPopUpAlgoFini();
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 									isFini = true ;	
 								}
 								else{
-									listeDeplacementToDo.addAll(listeDep);
+									//listeDeplacementToDo.addAll(listeDep);
 								}	
 							}					
 						}
@@ -370,9 +376,7 @@ public class Creation extends JFrame implements MouseListener{
 								listeDep = meilleur.algo(initial);	
 								oldDep = listeDep.getFirst();
 								noeudArr = listeDep.getLast();
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
-								listeDeplacementToDo.addAll(listeDep);
+								//listeDeplacementToDo.addAll(listeDep);
 							}
 							else {
 								// Meilleur d'Abord deja initialiser, il suffit de lancer l'algo
@@ -380,19 +384,23 @@ public class Creation extends JFrame implements MouseListener{
 								oldDep = listeDep.get(1);
 								noeudArr = listeDep.get(1);
 								initial = listeDep.getFirst();	
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
 								// C'est la fin
 								if (noeudArr.x == this.end_x && noeudArr.y ==end_y){
-									listeDeplacementToDo.addAll(listeDep);
-									LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
-									liste_parcours_final = meilleur.retourPere(noeudArr, liste_parcours_final);
-									listeArrive.addAll(liste_parcours_final);
+									//listeDeplacementToDo.addAll(listeDep);
+									///LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
+									//liste_parcours_final = meilleur.retourPere(noeudArr, liste_parcours_final);
+									//listeArrive.addAll(liste_parcours_final);
+									try {
+										this.addPopUpAlgoFini();
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 									isFini = true ;
 									
 								}
 								else{
-									listeDeplacementToDo.addAll(listeDep);
+									//listeDeplacementToDo.addAll(listeDep);
 								}	
 							}		
 						}
@@ -405,9 +413,8 @@ public class Creation extends JFrame implements MouseListener{
 								listeDep = star.algo(initial);	
 								oldDep = listeDep.getFirst();
 								noeudArr = listeDep.getLast();
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
-								listeDeplacementToDo.addAll(listeDep);
+								
+								//listeDeplacementToDo.addAll(listeDep);
 							}
 							else {
 								// AStar deja initialiser, il suffit de lancer l'algo
@@ -415,20 +422,25 @@ public class Creation extends JFrame implements MouseListener{
 								noeudArr = listeDep.getLast();
 								initial = listeDep.getFirst();
 								oldDep = listeDep.getLast();
-								this.pos_x = noeudArr.x;
-								this.pos_y = noeudArr.y;
+							
 							
 			
 								// C'est la fin
 								if (noeudArr.x == this.end_x && noeudArr.y ==end_y){
-									listeDeplacementToDo.addAll(listeDep);
-									LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
-									liste_parcours_final = star.retourPere(noeudArr, liste_parcours_final);
-									listeArrive.addAll(liste_parcours_final);
+									//listeDeplacementToDo.addAll(listeDep);
+									//LinkedList<Noeud> liste_parcours_final = new LinkedList<Noeud>();
+									//liste_parcours_final = star.retourPere(noeudArr, liste_parcours_final);
+									//listeArrive.addAll(liste_parcours_final);
+									try {
+										this.addPopUpAlgoFini();
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 									isFini = true ;
 								}
 								else{
-									listeDeplacementToDo.addAll(listeDep);
+									//listeDeplacementToDo.addAll(listeDep);
 								}	
 							}		
 							
@@ -475,6 +487,7 @@ public class Creation extends JFrame implements MouseListener{
 			this.add(this.my_panel,BorderLayout.CENTER);
 			this.uniforme = null ;
 			this.meilleur = null ;
+			this.nombreCout = -1 ;
 			this.star = null ;
 			this.listeDeplacementToDo = new LinkedList<Noeud>();
 			this.listeArrive = new LinkedList<Noeud>();
@@ -498,7 +511,6 @@ public class Creation extends JFrame implements MouseListener{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			    System.out.println(fichier);
 			    sortie.close();
 			    this.file = fichier ;			    
 			    this.listeDeplacementToDo = new LinkedList<Noeud>();
@@ -506,6 +518,7 @@ public class Creation extends JFrame implements MouseListener{
 			    this.remove(my_panel);
 			    this.uniforme = null ;
 				this.meilleur = null ;
+				this.nombreCout = -1 ;
 				this.star = null ;
 				this.ReadFile(fichier);
 			    this.my_panel = new My_Laby(x,y,my_laby,this);
@@ -519,7 +532,7 @@ public class Creation extends JFrame implements MouseListener{
 		
 		public static void main ( String argv[]){	
 			Creation my_lab = new Creation();
-			my_lab.setLocationRelativeTo (null);
+			my_lab.setLocation(500, 100);
 			my_lab.pack ();
 			my_lab.setVisible (true);
 			// Permet l'actualisation de l'affichage en temps réél
@@ -528,7 +541,7 @@ public class Creation extends JFrame implements MouseListener{
 				my_lab.affichDeplacement();
 				my_lab.my_panel.affichage();
 				try {
-					Thread.sleep(250);
+					Thread.sleep(180);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -554,6 +567,14 @@ public class Creation extends JFrame implements MouseListener{
 			else if (!listeArrive.isEmpty()){
 				Noeud currentDep = listeArrive.removeFirst();
 				my_laby[currentDep.y][currentDep.x]=5;
+				if ( listeArrive.size()==1){
+					try {
+						this.addPopUpAlgoFini();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
@@ -609,6 +630,29 @@ public class Creation extends JFrame implements MouseListener{
 			    timer = new Timer(5000,hider);
 			    timer.start();
 			    timer_on = true ;
+		}
+	   
+	   public void addPopUpAlgoFini() throws InterruptedException{
+
+	        String text = "Arrivé ! \n Nombre de cout éxécuter : " + this.nombreCout ;
+			JTextArea resume = new JTextArea(text,5,5);
+	
+			Box vbox = new Box(BoxLayout.Y_AXIS);
+			vbox.add(Box.createHorizontalGlue());
+			JButton quit_b = new JButton("Quit");
+			quit_b.addActionListener ( new ActionListener () {
+		                @Override
+				public void actionPerformed ( ActionEvent event ){
+				    popup.hide();
+				}});
+			vbox.add(resume);
+			vbox.add(Box.createRigidArea( new Dimension (20,20)));
+			vbox.add(quit_b);
+ 
+			PopupFactory factory = PopupFactory.getSharedInstance();
+			popup = factory.getPopup(this, vbox,700, 200);
+			popup.show();
+
 		}
 	
 }
