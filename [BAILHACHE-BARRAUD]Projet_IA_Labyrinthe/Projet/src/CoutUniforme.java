@@ -1,0 +1,57 @@
+import java.util.LinkedList;
+
+
+public class CoutUniforme extends Algorithme{
+	
+	public CoutUniforme(int[][] tab, int x, int y, int pos_x, int pos_y, int end_x, int end_y, Noeud n) {
+		super(tab, x, y, pos_x, pos_y, end_x, end_y, n);
+		// Initialise le tableau des valeurs
+	}
+
+	
+	/* On lui donne le noeud où on se trouve et il rajoute ou non 
+	 * les noeuds autour de lui dans la liste des cases à visiter. 
+	 * A chaque fois on test si le noeud est valide, 
+	 * et si il ne mene pas à une impasse 
+	 */
+	public LinkedList<Noeud> algo( Noeud n){
+		LinkedList<Noeud> liste_deplacement_depuis_position = new LinkedList<Noeud>();
+		LinkedList<Noeud> liste_deplacement_depuis_arrive = new LinkedList<Noeud>();
+		LinkedList<Noeud> liste_chemin = new LinkedList<Noeud>();
+		Noeud noeudCourant ;				
+		if (!maListe.isEmpty()){
+			noeudCourant = maListe.getFirst();
+			// il faut vérifier que l'on n'a pas deja visiter cette case
+			while (this.pos_visiter[noeudCourant.y][noeudCourant.x]==1 ){
+				maListe.removeFirst();
+				noeudCourant = maListe.getFirst();
+			}
+			this.pos_visiter[noeudCourant.y][noeudCourant.x]=1;
+			maListe.removeFirst();				
+			
+			// On test les cases autour pour savoir si elle mène a une impasse et si on peut y accèder 
+			if (!isImpasse(noeudCourant.x+1,noeudCourant.y,vision,x,y) &&  isValide(noeudCourant.x+1,noeudCourant.y)){
+				maListe.add(new Noeud(noeudCourant.x+1,noeudCourant.y,noeudCourant.heuristique+1,noeudCourant));
+			}
+			if (!isImpasse(noeudCourant.x-1,noeudCourant.y,vision,x,y) && isValide(noeudCourant.x-1,noeudCourant.y)){
+				maListe.add(new Noeud(noeudCourant.x-1,noeudCourant.y,noeudCourant.heuristique+1,noeudCourant));
+			}
+			if (!isImpasse(noeudCourant.x,noeudCourant.y+1,vision,x,y)&& isValide(noeudCourant.x,noeudCourant.y+1)){
+				maListe.add(new Noeud(noeudCourant.x,noeudCourant.y+1,noeudCourant.heuristique+1,noeudCourant));
+			}
+			if (!isImpasse(noeudCourant.x,noeudCourant.y-1,vision,x,y) && isValide(noeudCourant.x,noeudCourant.y-1)){
+				maListe.add(new Noeud(noeudCourant.x,noeudCourant.y-1,noeudCourant.heuristique+1,noeudCourant));
+			}
+			
+			// On ordonne notre liste
+			fileOrdonne(maListe);
+			// On remplit nos liste de deplacements
+			liste_deplacement_depuis_position = this.retourPere(n, liste_deplacement_depuis_position);
+			liste_deplacement_depuis_arrive = this.retourPere(noeudCourant,liste_deplacement_depuis_arrive );
+			// On fait la liste des deplacement à effectuer pour aller du noeud où on se trouve au neud courant
+			liste_chemin = this.creationListeDeplacement(liste_deplacement_depuis_position, liste_deplacement_depuis_arrive);
+			return liste_chemin;		
+		}
+		return liste_chemin;
+	}
+}
